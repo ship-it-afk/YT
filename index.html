@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambient Technologies | Official</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 2026 Modern Palette */
+            --bg-light: #f5f5f7;
+            --bg-dark: #0a0a0c;
+            --card-light: rgba(255, 255, 255, 0.7);
+            --card-dark: rgba(24, 24, 27, 0.6);
+            --text-light: #1d1d1f;
+            --text-dark: #f5f5f7;
+            --accent: #FF0000; /* YouTube Red */
+            --glass-border: rgba(255, 255, 255, 0.1);
+            
+            /* Logic for Theme Switching */
+            color-scheme: light dark;
+            --bg: light-dark(var(--bg-light), var(--bg-dark));
+            --text: light-dark(var(--text-light), var(--text-dark));
+            --card: light-dark(var(--card-light), var(--card-dark));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.4s ease, color 0.4s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, .logo {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: lowercase;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--text);
+            background: transparent;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* --- Bento Grid --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(128, 128, 128, 0.1);
+            border-radius: 28px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* --- Specific Card Layouts --- */
+        .hero-card {
+            grid-column: span 3;
+            background: linear-gradient(135deg, var(--card), rgba(255, 0, 0, 0.05));
+        }
+
+        .hero-card h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .stat-card {
+            grid-column: span 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .video-card {
+            grid-column: span 2;
+            min-height: 250px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .social-card {
+            grid-column: span 2;
+            background: var(--text);
+            color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .social-card:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* --- Aesthetic Elements --- */
+        .badge {
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .cursor-blur {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,0,0,0.15) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-width: 800px) {
+            .bento-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            .hero-card, .stat-card, .video-card, .social-card {
+                grid-column: span 1;
+            }
+            .hero-card h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-blur" id="cursor"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">technologies<span>ambient</span></div>
+            <button class="theme-toggle" onclick="toggleTheme()">Switch Aesthetic</button>
+        </header>
+
+        <main class="bento-grid">
+            <div class="card hero-card">
+                <div class="badge">Live from the future</div>
+                <h1>Defining the <br>Ambient Tech Era.</h1>
+                <p>Exploring the intersection of seamless technology and digital lifestyle. Join the latest on YouTube.</p>
+            </div>
+
+            <div class="card stat-card">
+                <div class="number">480p</div>
+                <p>Ultra HD Quality</p>
+            </div>
+
+            <a href="https://youtube.com/@technologiesambient" target="_blank" class="card social-card">
+                SUBSCRIBE ON YOUTUBE ↗
+            </a>
+
+            <div class="card video-card" style="background-image: linear-gradient(transparent, rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80')">
+                <div style="color: white;">
+                    <h3>Latest Tech Review</h3>
+                    <p>Coming soon to the channel.</p>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column: span 2;">
+                <h3>About the Channel</h3>
+                <p>Ambient Technologies YouTube Channel is a technology-first and concepting second channel. Best for who want tech experiments.</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Smooth Cursor Follower
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Theme Toggler
+        function toggleTheme() {
+            const currentScheme = document.documentElement.style.getPropertyValue('color-scheme');
+            if (currentScheme === 'dark') {
+                document.documentElement.style.setProperty('color-scheme', 'light');
+            } else {
+                document.documentElement.style.setProperty('color-scheme', 'dark');
+            }
+        }
+
+        // Initialize based on system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.style.setProperty('color-scheme', 'dark');
+        } else {
+            document.documentElement.style.setProperty('color-scheme', 'light');
+        }
+    </script>
+</body>
+</html>
