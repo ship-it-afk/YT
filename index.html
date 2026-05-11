@@ -2,261 +2,231 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ambient Technologies | Official</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Technologies Ambient | Digital Experience</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 2026 Modern Palette */
-            --bg-light: #f5f5f7;
-            --bg-dark: #0a0a0c;
-            --card-light: rgba(255, 255, 255, 0.7);
-            --card-dark: rgba(24, 24, 27, 0.6);
-            --text-light: #1d1d1f;
-            --text-dark: #f5f5f7;
-            --accent: #FF0000; /* YouTube Red */
-            --glass-border: rgba(255, 255, 255, 0.1);
-            
-            /* Logic for Theme Switching */
+            /* Adaptive Color System */
             color-scheme: light dark;
-            --bg: light-dark(var(--bg-light), var(--bg-dark));
-            --text: light-dark(var(--text-light), var(--text-dark));
-            --card: light-dark(var(--card-light), var(--card-dark));
+            --bg: light-dark(#f2f2f7, #080808);
+            --card-bg: light-dark(rgba(255, 255, 255, 0.7), rgba(20, 20, 22, 0.6));
+            --text-primary: light-dark(#1c1c1e, #ffffff);
+            --text-secondary: light-dark(#636366, #a1a1aa);
+            --yt-red: #FF0000;
+            --glass-stroke: light-dark(rgba(0,0,0,0.05), rgba(255,255,255,0.1));
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: background-color 0.4s ease, color 0.4s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        h1, h2, .logo {
+            color: var(--text-primary);
             font-family: 'Outfit', sans-serif;
+            line-height: 1.5;
+            overflow-x: hidden;
+            transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .container {
-            max-width: 1100px;
+        /* --- Background Blur Effect --- */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 0, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 0, 0.05) 0%, transparent 50%);
+        }
+
+        /* --- Responsive Container --- */
+        .wrapper {
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 20px;
+            padding-bottom: 100px;
         }
 
-        /* --- Header --- */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 60px;
+            padding: 40px 0;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        .brand {
             font-weight: 900;
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
             letter-spacing: -1px;
-            text-transform: lowercase;
         }
 
-        .logo span {
-            color: var(--accent);
-        }
+        .brand span { color: var(--yt-red); }
 
-        .theme-toggle {
-            cursor: pointer;
-            padding: 10px 20px;
-            border-radius: 30px;
-            border: 1px solid var(--text);
-            background: transparent;
-            color: var(--text);
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        /* --- Bento Grid --- */
-        .bento-grid {
+        /* --- The Bento Grid (Laptop Focus) --- */
+        .bento {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: auto;
+            grid-auto-rows: minmax(180px, auto);
             gap: 20px;
         }
 
         .card {
-            background: var(--card);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(128, 128, 128, 0.1);
-            border-radius: 28px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-stroke);
+            border-radius: 32px;
             padding: 30px;
-            position: relative;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            text-decoration: none;
+            color: inherit;
         }
 
         .card:hover {
-            transform: translateY(-8px) scale(1.01);
-            border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: scale(1.02);
+            border-color: var(--yt-red);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
         }
 
-        /* --- Specific Card Layouts --- */
-        .hero-card {
-            grid-column: span 3;
-            background: linear-gradient(135deg, var(--card), rgba(255, 0, 0, 0.05));
+        /* --- Card Sizing Logic --- */
+        .card-large { grid-column: span 3; grid-row: span 2; }
+        .card-medium { grid-column: span 2; }
+        .card-tall { grid-row: span 2; }
+
+        .title-main {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 900;
+            line-height: 0.9;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
         }
 
-        .hero-card h1 {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            line-height: 1.1;
-        }
-
-        .stat-card {
-            grid-column: span 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .stat-card .number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--accent);
-        }
-
-        .video-card {
-            grid-column: span 2;
-            min-height: 250px;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: flex-end;
-        }
-
-        .social-card {
-            grid-column: span 2;
-            background: var(--text);
-            color: var(--bg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            text-decoration: none;
+        .btn-yt {
+            background: var(--yt-red);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 100px;
             font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            width: fit-content;
         }
 
-        .social-card:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* --- Aesthetic Elements --- */
-        .badge {
-            background: var(--accent);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        .cursor-blur {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(255,0,0,0.15) 0%, rgba(255,255,255,0) 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: -1;
-            transform: translate(-50%, -50%);
-        }
-
-        @media (max-width: 800px) {
-            .bento-grid {
-                grid-template-columns: repeat(1, 1fr);
+        /* --- Mobile Adaptations --- */
+        @media (max-width: 900px) {
+            .bento {
+                grid-template-columns: repeat(2, 1fr);
             }
-            .hero-card, .stat-card, .video-card, .social-card {
+            .card-large { grid-column: span 2; }
+        }
+
+        @media (max-width: 600px) {
+            .wrapper { padding: 15px; }
+            .bento {
+                grid-template-columns: 1fr; /* Single column for phones */
+                gap: 15px;
+            }
+            .card-large, .card-medium, .card-tall {
                 grid-column: span 1;
+                grid-row: span 1;
             }
-            .hero-card h1 { font-size: 2.5rem; }
+            .card { padding: 25px; border-radius: 24px; }
+            header { padding: 20px 0; }
         }
+
+        /* Modern Toggle */
+        .theme-switch {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-stroke);
+            background: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="cursor-blur" id="cursor"></div>
+    <div class="ambient-glow"></div>
 
-    <div class="container">
+    <div class="wrapper">
         <header>
-            <div class="logo">technologies<span>ambient</span></div>
-            <button class="theme-toggle" onclick="toggleTheme()">Switch Aesthetic</button>
+            <div class="brand">technologies<span>ambient</span></div>
+            <button class="theme-switch" onclick="toggleTheme()" aria-label="Toggle Theme">🌓</button>
         </header>
 
-        <main class="bento-grid">
-            <div class="card hero-card">
-                <div class="badge">Live from the future</div>
-                <h1>Defining the <br>Ambient Tech Era.</h1>
-                <p>Exploring the intersection of seamless technology and digital lifestyle. Join the latest on YouTube.</p>
+        <main class="bento">
+            <div class="card card-large">
+                <div>
+                    <p style="text-transform: uppercase; font-weight: 600; font-size: 0.8rem; color: var(--yt-red); margin-bottom: 10px;">• Active Now</p>
+                    <h1 class="title-main">Ambient Experiments Era.</h1>
+                    <p style="color: var(--text-secondary); max-width: 400px; margin-bottom: 30px;">
+                        Exploring the intersection of seamless technology and digital lifestyle. Join the latest on YouTube.
+                    </p>
+                </div>
+                <a href="https://youtube.com/@technologiesambient" class="btn-yt">Subscribe ↗</a>
             </div>
 
-            <div class="card stat-card">
-                <div class="number">480p</div>
-                <p>Ultra HD Quality</p>
+            <div class="card card-tall" style="background: var(--yt-red); color: white; border: none;">
+                <h2 style="font-size: 3rem;">480p</h2>
+                <p style="font-weight: 600; opacity: 0.8;">Content Quality Resolution</p>
             </div>
 
-            <a href="https://youtube.com/@technologiesambient" target="_blank" class="card social-card">
-                SUBSCRIBE ON YOUTUBE ↗
+            <a href="https://youtube.com/@technologiesambient" class="card card-medium">
+                <h3>Latest Uploads</h3>
+                <p style="color: var(--text-secondary);">Watch our newest experiements into ambient technologies.</p>
+                <div style="margin-top: 20px; height: 4px; background: var(--glass-stroke); border-radius: 2px;">
+                    <div style="width: 75%; height: 100%; background: var(--yt-red); border-radius: 2px;"></div>
+                </div>
             </a>
 
-            <div class="card video-card" style="background-image: linear-gradient(transparent, rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80')">
-                <div style="color: white;">
-                    <h3>Latest Tech Review</h3>
-                    <p>Coming soon to the channel.</p>
-                </div>
+            <div class="card">
+                <h3>Cross-Platform</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary);">Optimized for Mobile, Tablet, and Desktop viewing.</p>
             </div>
-
-            <div class="card" style="grid-column: span 2;">
-                <h3>About the Channel</h3>
-                <p>Ambient Technologies YouTube Channel is a technology-first and concepting second channel. Best for who want tech experiments.</p>
+            
+            <div class="card">
+                <h3>About Me</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary);">A curious person about tech experiment</p>
             </div>
         </main>
     </div>
 
     <script>
-        // Smooth Cursor Follower
-        const cursor = document.getElementById('cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-
-        // Theme Toggler
+        // Automatic Theme Management
         function toggleTheme() {
-            const currentScheme = document.documentElement.style.getPropertyValue('color-scheme');
-            if (currentScheme === 'dark') {
-                document.documentElement.style.setProperty('color-scheme', 'light');
-            } else {
-                document.documentElement.style.setProperty('color-scheme', 'dark');
-            }
+            const doc = document.documentElement;
+            const current = getComputedStyle(doc).getPropertyValue('color-scheme').trim();
+            doc.style.setProperty('color-scheme', current === 'dark' ? 'light' : 'dark');
         }
 
-        // Initialize based on system preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.style.setProperty('color-scheme', 'dark');
-        } else {
-            document.documentElement.style.setProperty('color-scheme', 'light');
+        // Mouse Move Ambient Effect (Laptop only)
+        if (window.matchMedia("(min-width: 1024px)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) * 100;
+                const y = (e.clientY / window.innerHeight) * 100;
+                document.querySelector('.ambient-glow').style.background = 
+                    `radial-gradient(circle at ${x}% ${y}%, rgba(255, 0, 0, 0.08) 0%, transparent 40%)`;
+            });
         }
     </script>
 </body>
